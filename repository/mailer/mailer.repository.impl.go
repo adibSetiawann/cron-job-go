@@ -1,9 +1,11 @@
 package repository
 
 import (
-
 	"bytes"
+	"math/rand"
+	"strings"
 	"text/template"
+	"time"
 
 	"github.com/adibSetiawann/cronjob/config"
 	"github.com/adibSetiawann/cronjob/entity"
@@ -15,6 +17,32 @@ import (
 )
 
 type MailerRepositoryImplement struct {
+}
+
+const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+var seededRand *rand.Rand = rand.New(
+	rand.NewSource(time.Now().UnixNano()))
+
+func StringWithCharset(length int, charset string) string {
+	b := make([]byte, length)
+	for i := range b {
+		b[i] = charset[seededRand.Intn(len(charset))]
+	}
+	return string(b)
+}
+
+func String(length int) string {
+	return StringWithCharset(length, charset)
+}
+
+func GenerateOTP() string {
+	rndmString := strings.ToUpper(String(6))
+
+	var str strings.Builder
+	str.WriteString(rndmString)
+
+	return str.String()
 }
 
 var client *twilio.RestClient = twilio.NewRestClientWithParams(twilio.ClientParams{
@@ -37,12 +65,12 @@ func (*MailerRepositoryImplement) SendOtp(user *model.SendOtp) (string, error) {
 	var body bytes.Buffer
 	t, _ := template.ParseFiles("./body.html")
 
-	t.Execute(&body, struct{ Name string }{Name: "Pelanggan"})
+	t.Execute(&body, struct{ Code string }{Code: GenerateOTP()})
 
 	m := gomail.NewMessage()
 	m.SetHeader("From", email_admin)
 	m.SetHeader("To", user.Email)
-	m.SetHeader("subject", "Reminder to Verify")
+	m.SetHeader("subject", "OTP Password")
 	m.SetBody("text/html", body.String())
 	d := gomail.NewDialer("smtp.gmail.com", 587, email_admin, password)
 
@@ -69,7 +97,6 @@ func (*MailerRepositoryImplement) VerifiedEmail(email string) error {
 		if errUpdate != nil {
 			return errUpdate
 		}
-		return nil
 	}
 	errUser := config.DB.Debug().First(&user, "email=?", email)
 	if errUser.Error != nil {
@@ -109,15 +136,16 @@ func (*MailerRepositoryImplement) ExpireLink(email string) error {
 func (*MailerRepositoryImplement) SendEmailVerification(email string) {
 	email_admin := config.GetEnvVariable("GMAIL")
 	password := config.GetEnvVariable("PASS_GMAIL")
+	
 	var body bytes.Buffer
 	t, _ := template.ParseFiles("./body.html")
 
-	t.Execute(&body, struct{ Name string }{Name: "Pelanggan"})
+	t.Execute(&body, struct{ Code string }{Code: GenerateOTP()})
 
 	m := gomail.NewMessage()
 	m.SetHeader("From", email_admin)
 	m.SetHeader("To", email)
-	m.SetHeader("subject", "Reminder to Verify")
+	m.SetHeader("subject", "OTP Password")
 	m.SetBody("text/html", body.String())
 	d := gomail.NewDialer("smtp.gmail.com", 587, email_admin, password)
 

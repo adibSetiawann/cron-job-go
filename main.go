@@ -46,12 +46,12 @@ func ExpiredEmail() {
 	}))
 
 	for {
-		time.Sleep(time.Second * 5)
+		time.Sleep(time.Second * 20)
 		var mailer []entity.Mailer
 		fmt.Println("check expired email")
 		config.DB.Find(&mailer, "status=?", "pending")
 		for i, v := range mailer {
-			if v.CreatedAt.Add(time.Minute * 4) == time.Now() {
+			if v.CreatedAt.Add(time.Hour * 1) == time.Now() {
 				mailer[i].Status = "Expired"
 				config.DB.Save(mailer[i])
 				fmt.Println("user email is expired")
@@ -89,7 +89,7 @@ func SendEmailReminder(email *string) {
 	m := gomail.NewMessage()
 	m.SetHeader("From", email_admin)
 	m.SetHeader("To", *email)
-	m.SetHeader("subject", "verify email!")
+	m.SetHeader("subject", "Reminder to verify email!")
 	m.SetBody("text/html", body.String())
 	d := gomail.NewDialer("smtp.gmail.com", 587, email_admin, password)
 
