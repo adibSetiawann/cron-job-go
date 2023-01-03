@@ -11,7 +11,7 @@ import (
 )
 
 type WalletServiceImpl struct {
-	userRepo repository.WalletRepository
+	walletRepo repository.WalletRepository
 }
 
 
@@ -24,7 +24,7 @@ func (cs *WalletServiceImpl) Create(request model.CreateWallet) (model.WalletRes
 		CurrencyId: request.CurrencyId,
 	}
 
-	errCreate := cs.userRepo.Create(&user)
+	errCreate := cs.walletRepo.Create(&user)
 	if errCreate != nil {
 		log.Println(errCreate.Error())
 		return userResponse, errCreate
@@ -38,7 +38,7 @@ func (cs *WalletServiceImpl) Create(request model.CreateWallet) (model.WalletRes
 }
 
 func (ms *WalletServiceImpl) GetById(id string) ([]model.WalletResponse, error) {
-	merchants, errFind := ms.userRepo.FindById(id)
+	merchants, errFind := ms.walletRepo.FindById(id)
 	if errFind != nil {
 		return nil, errFind
 	}
@@ -46,7 +46,7 @@ func (ms *WalletServiceImpl) GetById(id string) ([]model.WalletResponse, error) 
 }
 
 func (cs *WalletServiceImpl) GetAllData() ([]model.WalletResponse, error) {
-	users, errFind := cs.userRepo.FindAll()
+	users, errFind := cs.walletRepo.FindAll()
 	if errFind != nil {
 		return nil, errFind
 	}
@@ -72,8 +72,8 @@ func (ms *WalletServiceImpl) Validation(userRequest interface{}) error {
 	return nil
 }
 
-func NewWalletService(userRepo *repository.WalletRepository) WalletService {
+func NewWalletService(walletRepo *repository.WalletRepository) WalletService {
 	return &WalletServiceImpl{
-		userRepo: *userRepo,
+		walletRepo: *walletRepo,
 	}
 }

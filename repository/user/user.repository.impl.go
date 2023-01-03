@@ -11,10 +11,9 @@ import (
 )
 
 type UserRepositoryImplement struct {
-	
 }
 
-func (*UserRepositoryImplement) Signin(loginForm *model.LoginForm) (string, error){
+func (*UserRepositoryImplement) Signin(loginForm *model.LoginForm) (string, error) {
 	var userData entity.User
 
 	err := config.DB.Debug().First(&userData, "email=?", loginForm.Email)
@@ -37,11 +36,11 @@ func (*UserRepositoryImplement) Signin(loginForm *model.LoginForm) (string, erro
 		return "failed generate token", errToken
 	}
 
-
 	return token, nil
 }
 
-func (*UserRepositoryImplement) Signup(user *entity.User) error{
+func (*UserRepositoryImplement) Signup(user *entity.User) error {
+	
 	db := config.DB.Debug().Create(&user)
 	if db.Error != nil {
 		return db.Error
@@ -62,7 +61,7 @@ func (*UserRepositoryImplement) FindById(id string) ([]model.UserResponse, error
 	return users, nil
 }
 
-func(*UserRepositoryImplement) FindAll() ([]model.UserResponse, error) {
+func (*UserRepositoryImplement) FindAll() ([]model.UserResponse, error) {
 
 	var users []model.UserResponse
 
@@ -74,7 +73,6 @@ func(*UserRepositoryImplement) FindAll() ([]model.UserResponse, error) {
 	return users, nil
 }
 
-
-func NewUserRepository()  UserRepository{
+func NewUserRepository() UserRepository {
 	return &UserRepositoryImplement{}
 }
