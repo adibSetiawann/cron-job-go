@@ -26,9 +26,9 @@ type LoginForm struct {
 }
 
 func (UserResponse) TableName() string {
-	return "customers"
+	return "users"
 }
 
 func (UserRelationResponse) TableName() string {
-	return "customers"
+	return "users"
 }

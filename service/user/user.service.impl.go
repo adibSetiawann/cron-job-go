@@ -62,6 +62,8 @@ func (cs *UserServiceImpl) GetAllData() ([]model.UserResponse, error) {
 	return users, nil
 }
 
+
+
 func (ms *UserServiceImpl) Validation(userRequest interface{}) error {
 	var messageError string
 	var isError bool

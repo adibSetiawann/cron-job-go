@@ -4,8 +4,8 @@ import "github.com/adibSetiawann/cronjob/entity"
 
 type CreateWallet struct {
 	Amount     float64 `json:"amount" validate:"required"`
-	CurrencyId int     `json:"currency_id"`
-	UserId     int     `json:"user_id"`
+	CurrencyId int     `json:"currency_id" validate:"required"`
+	UserId     int     `json:"user_id" validate:"required"`
 }
 
 type WalletResponse struct {
