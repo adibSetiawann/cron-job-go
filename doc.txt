@@ -1,0 +1,2 @@
+semua relasi wallet baik user ataupun currency saya jadikan one on one karena asumsi saya dalam soalnya di table wallet ada foreign key nya, baik user_id, maupun currency_id.
+jika pakai many to many maka akan saya buatkan pivot table
