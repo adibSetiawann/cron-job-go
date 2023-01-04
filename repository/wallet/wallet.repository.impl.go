@@ -35,7 +35,7 @@ func(*WalletRepositoryImplement) FindAll() ([]model.WalletResponse, error) {
 
 	var wallets []model.WalletResponse
 
-	db := config.DB.Debug().Preload("Gender").Find(&wallets)
+	db := config.DB.Debug().Preload("User").Preload("Currency").Find(&wallets)
 	if db.Error != nil {
 		return nil, db.Error
 	}

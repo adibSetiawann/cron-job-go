@@ -41,7 +41,7 @@ func (mc *userController) Signin(c *fiber.Ctx) error {
 		})
 	}
 
-	if token == "please input correct password" {
+	if token == "please input correct password" || token == "user not found in database" {
 		return c.Status(404).JSON(fiber.Map{
 			"message": token,
 		})
