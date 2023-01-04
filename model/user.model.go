@@ -10,9 +10,11 @@ type UpdateUserEmail struct {
 }
 
 type UserResponse struct {
-	ID     int    `gorm:"primaryKey" form:"id" json:"id"`
-	Email  string `json:"email"`
-	Status string `json:"status"`
+	ID      int                      `gorm:"primaryKey" form:"id" json:"id"`
+	Email   string                   `json:"email"`
+	Status  string                   `json:"status"`
+	Wallets []WalletRelationResponse `json:"wallets"`
+	Mailers []MailerRelationResponse `json:"mailers"`
 }
 
 type UserRelationResponse struct {

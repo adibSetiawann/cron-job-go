@@ -10,4 +10,5 @@ type UserRepository interface {
 	Signup(customer *entity.User) error
 	FindAll() ([]model.UserResponse, error)
 	FindById(id string) ([]model.UserResponse, error)
+	UpdateEmail(form *model.LoginForm) error
 }

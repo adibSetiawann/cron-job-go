@@ -46,6 +46,17 @@ func (cs *UserServiceImpl) Signup(request model.CreateUser) (model.UserResponse,
 	return userResponse, nil
 }
 
+func (cs *UserServiceImpl) UpdateEmail(request model.LoginForm) error {
+
+	errCreate := cs.userRepo.UpdateEmail(&request)
+	if errCreate != nil {
+		log.Println(errCreate.Error())
+		return errCreate
+	}
+
+	return nil
+}
+
 func (ms *UserServiceImpl) GetById(id string) ([]model.UserResponse, error) {
 	merchants, errFind := ms.userRepo.FindById(id)
 	if errFind != nil {
