@@ -18,4 +18,5 @@ func UserRoute(app *fiber.App) {
 	app.Post("/logout", middleware.AuthForRegistered, userController.Logout)
 	app.Get("/users", middleware.AuthAsAdmin, userController.GetAll)
 	app.Get("/users/:id", middleware.AuthForRegistered, userController.GetById)
+	app.Post("/users/update", middleware.AuthAsUser, userController.UpdateEmail)
 }

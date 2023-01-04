@@ -106,6 +106,35 @@ func (mc *userController) Signup(c *fiber.Ctx) error {
 	})
 }
 
+
+func (mc *userController) UpdateEmail(c *fiber.Ctx) error {
+	userReq := new(model.LoginForm)
+
+	if err := c.BodyParser(userReq); err != nil {
+		return c.Status(503).JSON(fiber.Map{
+			"error": "request can't go on",
+		})
+	}
+
+	isErrorValidation := mc.userService.Validation(*userReq)
+	if isErrorValidation != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"error": isErrorValidation.Error(),
+		})
+	}
+
+	errCreate := mc.userService.UpdateEmail(*userReq)
+	if errCreate != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"error": "internal server error",
+		})
+	}
+
+	return c.Status(201).JSON(fiber.Map{
+		"message": "update data seuccess, please verify your email",
+	})
+}
+
 func (mc *userController) GetById(c *fiber.Ctx) error {
 	userId := c.Params("id")
 

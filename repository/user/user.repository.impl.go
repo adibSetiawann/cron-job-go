@@ -49,11 +49,30 @@ func (*UserRepositoryImplement) Signup(user *entity.User) error {
 	return nil
 }
 
+func (*UserRepositoryImplement) UpdateEmail(user *model.LoginForm) error {
+	var userData entity.User
+
+	err := config.DB.Debug().First(&userData, "email=?", user.Email)
+	if err.Error != nil {
+		return err.Error
+	}
+
+	userData.Email = user.Email
+	userData.Status = "pending"
+
+	db := config.DB.Debug().Save(&userData)
+	if db.Error != nil {
+		return db.Error
+	}
+
+	return nil
+}
+
 func (*UserRepositoryImplement) FindById(id string) ([]model.UserResponse, error) {
 
 	var users []model.UserResponse
 
-	err := config.DB.Debug().Preload("Gender").First(&users, "id=?", id)
+	err := config.DB.Debug().Preload("Wallets").Preload("Mailers").First(&users, "id=?", id)
 	if err.Error != nil {
 		return nil, err.Error
 	}
@@ -65,7 +84,7 @@ func (*UserRepositoryImplement) FindAll() ([]model.UserResponse, error) {
 
 	var users []model.UserResponse
 
-	db := config.DB.Debug().Preload("Gender").Find(&users)
+	db := config.DB.Debug().Preload("Wallets").Preload("Mailers").Find(&users)
 	if db.Error != nil {
 		return nil, db.Error
 	}

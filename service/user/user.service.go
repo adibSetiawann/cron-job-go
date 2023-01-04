@@ -8,4 +8,5 @@ type UserService interface {
 	GetAllData() ([]model.UserResponse, error)
 	GetById(id string) ([]model.UserResponse, error)
 	Validation(customerRequest interface{}) error
+	UpdateEmail(form model.LoginForm) error
 }
