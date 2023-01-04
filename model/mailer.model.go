@@ -1,7 +1,8 @@
 package model
 
 type SendOtp struct {
-	Email string `json:"email"`
+	Email  string `json:"email"`
+	UserId int    `json:"user_id"`
 }
 
 type VerifyEmail struct {
@@ -10,7 +11,7 @@ type VerifyEmail struct {
 }
 
 type MailerRelationResponse struct {
-	ID       int             `gorm:"primaryKey" json:"id"`
-	Email    string          `json:"email" validate:"required"`
-	Status   string          `json:"status"`
+	ID     int    `gorm:"primaryKey" json:"id"`
+	Email  string `json:"email" validate:"required"`
+	Status string `json:"status"`
 }

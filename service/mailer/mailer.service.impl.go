@@ -16,6 +16,7 @@ func (ms *MailerServiceImpl) SendEmail(payload *model.SendOtp) error{
 
 	data := model.SendOtp{
 		Email: payload.Email,
+		UserId: payload.UserId,
 	}
 
 	_, err := ms.mailerRepo.SendOtp(&data)

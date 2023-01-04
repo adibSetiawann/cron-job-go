@@ -56,6 +56,7 @@ func (*MailerRepositoryImplement) SendOtp(user *model.SendOtp) (string, error) {
 	email := entity.Mailer{
 		Email:  user.Email,
 		Status: "pending",
+		UserId: user.UserId,
 	}
 
 	dbEmail := config.DB.Debug().Create(&email)

@@ -29,6 +29,11 @@ func (*UserRepositoryImplement) Signin(loginForm *model.LoginForm) (string, erro
 	claims := jwt.MapClaims{}
 	claims["email"] = userData.Email
 	claims["exp"] = time.Now().Add(time.Minute * 1500).Unix()
+	if userData.Email == "admin@gmail.com" {
+		claims["role"] = "admin"
+	} else {
+		claims["role"] = "user"
+	}
 
 	token, errToken := utils.GenerateToken(&claims)
 
@@ -72,7 +77,7 @@ func (*UserRepositoryImplement) FindById(id string) ([]model.UserResponse, error
 
 	var users []model.UserResponse
 
-	err := config.DB.Debug().Preload("Wallets").Preload("Mailers").First(&users, "id=?", id)
+	err := config.DB.Debug().Preload("Wallets").Preload("Mailers").Preload("Currency").First(&users, "id=?", id)
 	if err.Error != nil {
 		return nil, err.Error
 	}

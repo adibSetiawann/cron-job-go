@@ -20,15 +20,15 @@ type WalletResponse struct {
 type WalletRelationResponse struct {
 	ID         int             `gorm:"primaryKey" json:"id"`
 	Amount     float64         `json:"amount" validate:"required"`
-	CurrencyId int             `json:"currency_id"`
-	Currency   entity.Currency `json:"currencies"`
-}
-
-func (CreateWallet) TableName() string {
-	return "wallets"
+	// CurrencyId int             `json:"currency_id"`
+	// Currency   entity.Currency `json:"currencies"`
 }
 
 func (WalletResponse) TableName() string {
+	return "wallets"
+}
+
+func (CreateWallet) TableName() string {
 	return "wallets"
 }
 
